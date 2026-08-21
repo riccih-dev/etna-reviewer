@@ -1,25 +1,24 @@
 # ETNA — Every Thesis Needs Anchoring
 
-A claim–evidence reviewer for manuscripts. It extracts checkable claims from a
+A claim–evidence reviewer for papers. It extracts checkable claims from a
 paper, retrieves the manuscript's own evidence for each one, verifies whether
 that evidence actually supports it, and runs deterministic checks (recomputed
 statistics, missing ablations, single-dataset generalization claims) that
 don't rely on a model at all. Every finding is grounded in an explicit
 claim → evidence → verdict path, shown as a clickable graph next to the
-findings list — nothing is asserted without a traceable reason.
-
-Grounded. Not generated.
+findings list.
 
 ## Architecture
 
 ```mermaid
 flowchart TD
-    A[Manuscript text / PDF] --> B[Parse into sentences<br/>section + page tagged]
+    A[Paper text / PDF] --> B[Parse into sentences<br/>section + page tagged]
     B --> C[Extract claims]
     C --> D[Retrieve evidence<br/>TF-IDF + sentence embeddings]
     D --> E[Verify claim vs evidence<br/>SUPPORTS / PARTIAL / CONTRADICTS / INSUFFICIENT]
     B --> F[Deterministic checks<br/>stats recomputation, ablation check,<br/>dataset-count check — no model involved]
-    E --> G[Claim–Evidence Graph<br/>CLAIM / EVIDENCE / DATASET / ASSUMPTION nodes]
+    E --> G[Claim–Evidence Graph<br/>CLAIM / EVIDENCE / DATASET 
+    / ASSUMPTION nodes]
     F --> G
     G --> H[Combined UI<br/>findings list ⇄ graph, click to highlight either]
 
@@ -28,7 +27,7 @@ flowchart TD
 ```
 
 The `LLMClient` interface ([reviewer/llm\_client.py](reviewer/llm_client.py))
-is the only thing that changes between backends — everything else in the
+is the only thing that changes between backends, everything else in the
 pipeline is identical either way:
 
 - **Offline** — rule-based (cue phrases + lexical overlap), no API key, no
